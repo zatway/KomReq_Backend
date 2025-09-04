@@ -1,0 +1,6 @@
+@KomReq_Backend_HostAddress = http://localhost:5186
+
+GET {{KomReq_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "dgSpecHash": "L6z2gseNfWI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.7\\microsoft.aspnetcore.openapi.9.0.7.nupkg.sha512",
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "message": "Failed to verify the root directory of local source ' http://intranet.kd.local:8040/repository/kd/'.",
+      "projectPath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "libraryId": "Microsoft.AspNetCore.OpenApi",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "message": "Failed to verify the root directory of local source ' http://intranet.kd.local:8040/repository/kd/'.",
+      "projectPath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "libraryId": "Microsoft.AspNetCore.OpenApi",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "message": "Failed to verify the root directory of local source ' http://intranet.kd.local:8040/repository/kd/'.",
+      "projectPath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": []
+    }
+  ]
+}
