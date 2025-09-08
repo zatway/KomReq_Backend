@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj": {}
+    "C:\\work\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj": {
+    "C:\\work\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+        "projectUniqueName": "C:\\work\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
         "projectName": "KomReq_Backend",
-        "projectPath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
+        "projectPath": "C:\\work\\KomReq_Backend\\KomReq_Backend\\KomReq_Backend.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\zatway\\RiderProjects\\KomReq_Backend\\KomReq_Backend\\obj\\",
+        "outputPath": "C:\\work\\KomReq_Backend\\KomReq_Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -20,7 +20,7 @@
           "net9.0"
         ],
         "sources": {
-          " http://intranet.kd.local:8040/repository/kd/": {},
+          "http://intranet.kd.local:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,15 +39,61 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[7.0.0-beta4, )"
+            },
+            "JWT": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNetCore.JsonPatch": {
+              "target": "Package",
+              "version": "[10.0.0-preview.7.25380.108, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.ApiDescription.Server": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.0-preview.7.25380.108, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "PostSharp.Patterns.Model": {
+              "target": "Package",
+              "version": "[2025.1.8, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.1.2, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerGen": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "System.Threading.ThreadPool": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
@@ -61,6 +107,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.0.1, 3.0.1];[3.1.10, 3.1.10];[5.0.0, 5.0.0];[6.0.36, 6.0.36];[7.0.20, 7.0.20];[8.0.13, 8.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0];[3.1.0, 3.1.0];[5.0.0, 5.0.0];[6.0.36, 6.0.36];[7.0.20, 7.0.20];[8.0.13, 8.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0];[3.1.0, 3.1.0];[5.0.0, 5.0.0];[6.0.36, 6.0.36];[7.0.20, 7.0.20];[8.0.13, 8.0.13]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -69,7 +129,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\zatway\\.dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KomReq_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a63b08ca5755e699553af61712ce3bf2efa7a198")]
 [assembly: System.Reflection.AssemblyProductAttribute("KomReq_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KomReq_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
