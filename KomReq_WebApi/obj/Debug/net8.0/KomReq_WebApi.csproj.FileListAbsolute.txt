@@ -1,0 +1,8 @@
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.csproj.AssemblyReference.cache
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.AssemblyInfoInputs.cache
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.AssemblyInfo.cs
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.csproj.CoreCompileInputs.cache
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.MvcApplicationPartsAssemblyInfo.cs
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.MvcApplicationPartsAssemblyInfo.cache
+C:\work\KomReq_Backend\KomReq_WebApi\obj\Debug\net8.0\KomReq_WebApi.sourcelink.json

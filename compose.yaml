@@ -1,0 +1,7 @@
+﻿services:
+  komreq_webapi:
+    image: komreq_webapi
+    build:
+      context: .
+      dockerfile: KomReq_WebApi/Dockerfile
+

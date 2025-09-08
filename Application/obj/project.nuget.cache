@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "aWgZEORrKfw=",
+  "success": true,
+  "projectFilePath": "C:\\work\\KomReq_Backend\\Application\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.13\\microsoft.netcore.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.13\\microsoft.windowsdesktop.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.13\\microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}

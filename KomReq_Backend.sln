@@ -1,6 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KomReq_Backend", "KomReq_Backend\KomReq_Backend.csproj", "{23906CEE-0334-4F9D-8449-6C7276F19079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{87419751-82F0-4E94-9B87-E70875F231A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C1937CFE-128B-4F00-9C23-962FA545AA09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platform.csproj", "{BC57991C-DD9A-42A5-881B-569DC3B3FA83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KomReq_WebApi", "KomReq_WebApi\KomReq_WebApi.csproj", "{23A6F50B-4A34-4E8E-90D8-52F467D3F056}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7564A928-A742-47B7-BD46-5BEF152A959F}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +19,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23906CEE-0334-4F9D-8449-6C7276F19079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23906CEE-0334-4F9D-8449-6C7276F19079}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23906CEE-0334-4F9D-8449-6C7276F19079}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23906CEE-0334-4F9D-8449-6C7276F19079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87419751-82F0-4E94-9B87-E70875F231A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87419751-82F0-4E94-9B87-E70875F231A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87419751-82F0-4E94-9B87-E70875F231A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87419751-82F0-4E94-9B87-E70875F231A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1937CFE-128B-4F00-9C23-962FA545AA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1937CFE-128B-4F00-9C23-962FA545AA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1937CFE-128B-4F00-9C23-962FA545AA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1937CFE-128B-4F00-9C23-962FA545AA09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC57991C-DD9A-42A5-881B-569DC3B3FA83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC57991C-DD9A-42A5-881B-569DC3B3FA83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC57991C-DD9A-42A5-881B-569DC3B3FA83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC57991C-DD9A-42A5-881B-569DC3B3FA83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23A6F50B-4A34-4E8E-90D8-52F467D3F056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A6F50B-4A34-4E8E-90D8-52F467D3F056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A6F50B-4A34-4E8E-90D8-52F467D3F056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A6F50B-4A34-4E8E-90D8-52F467D3F056}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
