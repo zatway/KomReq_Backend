@@ -11,8 +11,6 @@ using Platform.Models.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -96,7 +94,6 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<KomReqDbContext>();
     db.Database.Migrate();
 
-    // Создание ролей при первом запуске
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
     string[] roles = new[] { "Admin", "Inspector", "Operator" };
     foreach (var role in roles)

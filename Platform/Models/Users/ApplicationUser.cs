@@ -2,7 +2,7 @@
 
 namespace Platform.Models.Users
 {
-    public abstract class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         // Дополнительные поля при необходимости
     }

@@ -13,5 +13,6 @@ public class KomReqDbContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
     }
 }
