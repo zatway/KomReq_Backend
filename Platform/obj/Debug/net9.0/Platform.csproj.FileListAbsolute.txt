@@ -1,0 +1,13 @@
+C:\work\KomReq_Backend\Platform\bin\Debug\net9.0\Platform.deps.json
+C:\work\KomReq_Backend\Platform\bin\Debug\net9.0\Platform.dll
+C:\work\KomReq_Backend\Platform\bin\Debug\net9.0\Platform.pdb
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.csproj.AssemblyReference.cache
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.GeneratedMSBuildEditorConfig.editorconfig
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.AssemblyInfoInputs.cache
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.AssemblyInfo.cs
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.csproj.CoreCompileInputs.cache
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.sourcelink.json
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.dll
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\refint\Platform.dll
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\Platform.pdb
+C:\work\KomReq_Backend\Platform\obj\Debug\net9.0\ref\Platform.dll

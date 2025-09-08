@@ -1,0 +1,16 @@
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Infrastructure.deps.json
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Infrastructure.dll
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Infrastructure.pdb
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Platform.dll
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Platform.pdb
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.csproj.AssemblyReference.cache
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.AssemblyInfoInputs.cache
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.AssemblyInfo.cs
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.csproj.CoreCompileInputs.cache
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.sourcelink.json
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastr.15EFFBFE.Up2Date
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.dll
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\refint\Infrastructure.dll
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.pdb
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\ref\Infrastructure.dll

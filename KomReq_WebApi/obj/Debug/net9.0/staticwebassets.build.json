@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "w/mA+2SBRl72OTpfGBtGcVeP9Iahn5QplfuE0KmfYfM=",
+  "Source": "KomReq_WebApi",
+  "BasePath": "_content/KomReq_WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
