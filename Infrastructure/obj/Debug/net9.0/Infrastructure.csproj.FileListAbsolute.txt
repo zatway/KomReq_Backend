@@ -14,3 +14,5 @@ C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.dll
 C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\refint\Infrastructure.dll
 C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.pdb
 C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\ref\Infrastructure.dll
+C:\work\KomReq_Backend\Infrastructure\bin\Debug\net9.0\Infrastructure.runtimeconfig.json
+C:\work\KomReq_Backend\Infrastructure\obj\Debug\net9.0\Infrastructure.genruntimeconfig.cache

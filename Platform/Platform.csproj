@@ -7,13 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\" />
-      <Folder Include="Intrefaces\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8" />
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.8" />
     </ItemGroup>
 
 </Project>
