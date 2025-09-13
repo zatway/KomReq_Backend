@@ -76,7 +76,7 @@ namespace Infrastructure.DbContext
                 new RequestStatus { Id = 6, Name = "Отменена", OrderNum = 6, IsFinal = true }
             );
 
-            // Request
+            // Response
             modelBuilder.Entity<Request>()
                 .HasIndex(r => r.ClientId);
             modelBuilder.Entity<Request>()

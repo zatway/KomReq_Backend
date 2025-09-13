@@ -1,6 +1,6 @@
 ﻿namespace Platform.Helpers.UsersHelper;
 
-public static class AddUserHelper
+public static class AddUserService
 {
     public static string GetDescriptionByRoleName(string roleName)
     {

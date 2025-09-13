@@ -16,3 +16,5 @@ C:\work\KomReq_Backend\Application\bin\Debug\net9.0\Platform.pdb
 C:\work\KomReq_Backend\Application\obj\Debug\net9.0\Application.csproj.AssemblyReference.cache
 C:\work\KomReq_Backend\Application\obj\Debug\net9.0\Applicat.44B5EDA2.Up2Date
 C:\work\KomReq_Backend\Application\obj\Debug\net9.0\Application.genruntimeconfig.cache
+C:\work\KomReq_Backend\Application\bin\Debug\net9.0\Infrastructure.dll
+C:\work\KomReq_Backend\Application\bin\Debug\net9.0\Infrastructure.pdb

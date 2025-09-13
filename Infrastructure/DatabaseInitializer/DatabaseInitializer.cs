@@ -75,7 +75,7 @@ public class DatabaseInitializer
                 await _roleManager.CreateAsync(new ApplicationRole
                 {
                     Name = role,
-                    Description = AddUserHelper.GetDescriptionByRoleName(role)
+                    Description = AddUserService.GetDescriptionByRoleName(role)
                 });
                 Console.WriteLine($"Роль '{role}' создана.");
             }

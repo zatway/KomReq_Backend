@@ -1,4 +1,4 @@
-﻿namespace Platform.Models.Request.Identity;
+﻿namespace Platform.Models.Response.Identity;
 
 public class ChangeRoleModel
 {
