@@ -49,6 +49,7 @@ public static class WebApiExtensions
             options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
         })
         .AddApplicationPart(typeof(AuthController).Assembly)
+        .AddApplicationPart(typeof(RequestController).Assembly)
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
