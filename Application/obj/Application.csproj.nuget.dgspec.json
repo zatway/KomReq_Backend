@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\work\\KomReq\\KomReq_Backend\\Application\\Application.csproj": {}
+    "E:\\work_project\\komReq\\KomReq_Backend\\Application\\Application.csproj": {}
   },
   "projects": {
-    "C:\\work\\KomReq\\KomReq_Backend\\Application\\Application.csproj": {
+    "E:\\work_project\\komReq\\KomReq_Backend\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\KomReq\\KomReq_Backend\\Application\\Application.csproj",
+        "projectUniqueName": "E:\\work_project\\komReq\\KomReq_Backend\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Application\\Application.csproj",
+        "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\KomReq\\KomReq_Backend\\Application\\obj\\",
+        "outputPath": "E:\\work_project\\komReq\\KomReq_Backend\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -27,11 +27,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj": {
-                "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj"
+              "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj"
               },
-              "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj": {
-                "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj"
+              "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj": {
+                "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj"
               }
             }
           }
@@ -107,18 +107,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj": {
+    "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\KomReq\\KomReq_Backend\\Infrastructure\\obj\\",
+        "outputPath": "E:\\work_project\\komReq\\KomReq_Backend\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -134,8 +134,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj": {
-                "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj"
+              "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj": {
+                "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj"
               }
             }
           }
@@ -195,18 +195,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj": {
+    "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj",
+        "projectUniqueName": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj",
         "projectName": "Platform",
-        "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj",
+        "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\obj\\",
+        "outputPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -269,7 +269,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

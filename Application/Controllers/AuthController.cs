@@ -47,12 +47,21 @@ public class AuthController : ControllerBase
         if (!result.Succeeded)
             return BadRequest(result.Errors);
 
-        if (!await _roleManager.RoleExistsAsync(model.Role))
+        var rolesToAdd = model.Roles?.Distinct().ToList() ?? new List<string>();
+        if (rolesToAdd.Count == 0)
         {
-            await _roleManager.CreateAsync(new ApplicationRole { Name = model.Role, Description = $"Роль {model.Role}" });
+            rolesToAdd.Add("Client");
         }
 
-        await _userManager.AddToRoleAsync(user, model.Role);
+        foreach (var role in rolesToAdd)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                await _roleManager.CreateAsync(new ApplicationRole { Name = role, Description = $"Роль {role}" });
+            }
+        }
+
+        await _userManager.AddToRolesAsync(user, rolesToAdd);
         return Ok(new { Message = "Пользователь успешно зарегистрирован." });
     }
 
@@ -193,17 +202,26 @@ public class AuthController : ControllerBase
         var currentRoles = await _userManager.GetRolesAsync(user);
         await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-        if (!await _roleManager.RoleExistsAsync(model.NewRole))
+        var rolesToAdd = model.NewRoles?.Distinct().ToList() ?? new List<string>();
+        if (rolesToAdd.Count == 0)
         {
-            await _roleManager.CreateAsync(new ApplicationRole
-            {
-                Name = model.NewRole,
-                Description = $"Роль {model.NewRole}"
-            });
+            return BadRequest(new { Message = "Не указаны роли для назначения." });
         }
 
-        await _userManager.AddToRoleAsync(user, model.NewRole);
-        return Ok(new { Message = $"Роль пользователя изменена на {model.NewRole}" });
+        foreach (var role in rolesToAdd)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                await _roleManager.CreateAsync(new ApplicationRole
+                {
+                    Name = role,
+                    Description = $"Роль {role}"
+                });
+            }
+        }
+
+        await _userManager.AddToRolesAsync(user, rolesToAdd);
+        return Ok(new { Message = $"Роли пользователя изменены." });
     }
 }
 

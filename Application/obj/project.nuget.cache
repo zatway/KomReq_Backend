@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hJzJnSV03O8=",
+  "dgSpecHash": "VyHj5k/Xgm0=",
   "success": true,
-  "projectFilePath": "C:\\work\\KomReq\\KomReq_Backend\\Application\\Application.csproj",
+  "projectFilePath": "E:\\work_project\\komReq\\KomReq_Backend\\Application\\Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zatway\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.8\\microsoft.aspnetcore.authentication.jwtbearer.9.0.8.nupkg.sha512",

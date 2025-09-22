@@ -3,5 +3,5 @@
 public class ChangeRoleModel
 {
     public string UserId { get; set; }
-    public string NewRole { get; set; }
+    public List<string> NewRoles { get; set; } = new();
 }

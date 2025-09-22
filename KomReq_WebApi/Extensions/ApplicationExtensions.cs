@@ -14,6 +14,7 @@ public static class ApplicationExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         // Тут можно зарегистрировать сервисы бизнес-логики, мапперы и т.д.
+        services.AddScoped<Application.Service.RequestService>();
         return services;
     }
 
