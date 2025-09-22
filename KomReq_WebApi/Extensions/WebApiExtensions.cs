@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.OpenApi.Models;
 using Platform.Helpers;
+using System.Text.Json.Serialization;
 
 namespace KomReq_WebApi.Extensions;
 
@@ -50,10 +51,17 @@ public static class WebApiExtensions
         })
         .AddApplicationPart(typeof(AuthController).Assembly)
         .AddApplicationPart(typeof(RequestController).Assembly)
+        .AddApplicationPart(typeof(EquipmentTypeController).Assembly)
+        .AddApplicationPart(typeof(AuditLogController).Assembly)
+        .AddApplicationPart(typeof(StatisticController).Assembly)
+        .AddApplicationPart(typeof(ReportController).Assembly)
+        .AddApplicationPart(typeof(RequestStatusController).Assembly)
+        .AddApplicationPart(typeof(NotificationController).Assembly)
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.WriteIndented = true;
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
         services.AddCors(options =>

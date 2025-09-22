@@ -15,6 +15,7 @@ public static class ApplicationExtensions
     {
         // Тут можно зарегистрировать сервисы бизнес-логики, мапперы и т.д.
         services.AddScoped<Application.Service.RequestService>();
+        services.AddScoped<Application.Service.ReportService>();
         return services;
     }
 
@@ -23,7 +24,11 @@ public static class ApplicationExtensions
         services.AddDbContext<KomReqDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddIdentity<ApplicationUser, ApplicationRole>()
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false; // Временно отключено для отладки
+                options.ClaimsIdentity.UserIdClaimType = System.Security.Claims.ClaimTypes.NameIdentifier; // Явное сопоставление
+            })
             .AddEntityFrameworkStores<KomReqDbContext>()
             .AddDefaultTokenProviders();
 

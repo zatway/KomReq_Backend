@@ -170,61 +170,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AuditLogs");
                 });
 
-            modelBuilder.Entity("Platform.Models.Dtos.Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CompanyName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Tin")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<Guid>("UniqueCode")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyName");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Tin")
-                        .IsUnique();
-
-                    b.HasIndex("UniqueCode")
-                        .IsUnique();
-
-                    b.ToTable("Clients");
-                });
-
             modelBuilder.Entity("Platform.Models.Dtos.EquipmentType", b =>
                 {
                     b.Property<int>("Id")
@@ -296,9 +241,6 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("DeliveryStatus")
                         .HasColumnType("integer");
 
@@ -322,8 +264,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.HasIndex("RequestId");
 
@@ -371,7 +311,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("Platform.Models.Dtos.Response", b =>
+            modelBuilder.Entity("Platform.Models.Dtos.Request", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -379,14 +319,15 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Comments")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("CurrentStatusId")
                         .HasColumnType("integer");
@@ -411,9 +352,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("CreatedDate");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("CurrentStatusId");
 
@@ -857,12 +798,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Platform.Models.Dtos.Notification", b =>
                 {
-                    b.HasOne("Platform.Models.Dtos.Client", "Client")
-                        .WithMany("Notifications")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Platform.Models.Dtos.Response", "Response")
+                    b.HasOne("Platform.Models.Dtos.Request", "Request")
                         .WithMany("Notifications")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -872,9 +808,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Client");
-
-                    b.Navigation("Response");
+                    b.Navigation("Request");
 
                     b.Navigation("User");
                 });
@@ -890,12 +824,12 @@ namespace Infrastructure.Migrations
                     b.Navigation("GeneratedByUser");
                 });
 
-            modelBuilder.Entity("Platform.Models.Dtos.Response", b =>
+            modelBuilder.Entity("Platform.Models.Dtos.Request", b =>
                 {
-                    b.HasOne("Platform.Models.Dtos.Client", "Client")
-                        .WithMany("Requests")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Platform.Models.Users.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Platform.Models.Dtos.RequestStatus", "CurrentStatus")
@@ -915,7 +849,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("Client");
+                    b.Navigation("Creator");
 
                     b.Navigation("CurrentStatus");
 
@@ -926,7 +860,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Platform.Models.Dtos.RequestAssignment", b =>
                 {
-                    b.HasOne("Platform.Models.Dtos.Response", "Response")
+                    b.HasOne("Platform.Models.Dtos.Request", "Request")
                         .WithMany("RequestAssignments")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -938,14 +872,14 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Response");
+                    b.Navigation("Request");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Platform.Models.Dtos.RequestFile", b =>
                 {
-                    b.HasOne("Platform.Models.Dtos.Response", "Response")
+                    b.HasOne("Platform.Models.Dtos.Request", "Request")
                         .WithMany("RequestFiles")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -957,7 +891,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Response");
+                    b.Navigation("Request");
 
                     b.Navigation("UploadedByUser");
                 });
@@ -981,7 +915,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("OldStatusId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Platform.Models.Dtos.Response", "Response")
+                    b.HasOne("Platform.Models.Dtos.Request", "Request")
                         .WithMany("RequestHistories")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -993,7 +927,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("OldStatus");
 
-                    b.Navigation("Response");
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("Platform.Models.Dtos.StatusStatistic", b =>
@@ -1018,19 +952,12 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Platform.Models.Dtos.Client", b =>
-                {
-                    b.Navigation("Notifications");
-
-                    b.Navigation("Requests");
-                });
-
             modelBuilder.Entity("Platform.Models.Dtos.EquipmentType", b =>
                 {
                     b.Navigation("Requests");
                 });
 
-            modelBuilder.Entity("Platform.Models.Dtos.Response", b =>
+            modelBuilder.Entity("Platform.Models.Dtos.Request", b =>
                 {
                     b.Navigation("Notifications");
 

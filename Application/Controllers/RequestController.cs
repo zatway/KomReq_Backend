@@ -7,6 +7,7 @@ using Infrastructure.DbContext;
 using Platform.Models.Request.Request;
 using Platform.Models.Response.Request;
 using Platform.Models.Users;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Controllers;
 
@@ -17,12 +18,18 @@ public class RequestController : ControllerBase
     private readonly KomReqDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RequestService _requestService;
+    private readonly ILogger<RequestController> _logger;
 
-    public RequestController(KomReqDbContext dbContext, UserManager<ApplicationUser> userManager, RequestService requestService)
+    public RequestController(
+        KomReqDbContext dbContext,
+        UserManager<ApplicationUser> userManager,
+        RequestService requestService,
+        ILogger<RequestController> logger)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _requestService = requestService;
+        _logger = logger;
     }
 
     // Создание новой заявки (менеджеры)
@@ -33,7 +40,9 @@ public class RequestController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _requestService.CreateRequestAsync(model, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        _logger.LogInformation("Current User ID: {UserId}", currentUserId);
+        var result = await _requestService.CreateRequestAsync(model, currentUserId); // Возвращено на FindFirstValue
         if (!result.Success)
             return BadRequest(new { Message = result.ErrorMessage });
 
@@ -151,5 +160,19 @@ public class RequestController : ControllerBase
             return NotFound(new { Message = result.ErrorMessage });
 
         return Ok(new { Message = "Заявка удалена." });
+    }
+
+    [HttpPost("{id}/add-comment")]
+    [Authorize(Roles = "Manager,Technician,Client")]
+    public async Task<IActionResult> AddComment(int id, [FromBody] AddCommentDto model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _requestService.AddCommentToRequestAsync(id, model, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        if (!result.Success)
+            return result.ErrorCode == 404 ? NotFound(new { Message = result.ErrorMessage }) : Forbid(result.ErrorMessage);
+
+        return Ok(new { Message = "Комментарий добавлен." });
     }
 }

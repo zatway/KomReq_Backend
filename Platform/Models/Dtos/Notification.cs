@@ -14,7 +14,7 @@ public class Notification
 
     public string? UserId { get; set; }
 
-    public int? ClientId { get; set; }
+    // public int? ClientId { get; set; }
 
     [Required]
     public NotificationType Type { get; set; }
@@ -38,6 +38,6 @@ public class Notification
     [ForeignKey("UserId")]
     public ApplicationUser? User { get; set; }
 
-    [ForeignKey("ClientId")]
-    public Client? Client { get; set; }
+    // [ForeignKey("ClientId")]
+    // public Client? Client { get; set; }
 }

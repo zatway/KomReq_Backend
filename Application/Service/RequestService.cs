@@ -6,6 +6,7 @@ using Platform.Models.Enums;
 using Platform.Models.Request.Request;
 using Platform.Models.Response.Request;
 using Platform.Models.Users;
+using Microsoft.Extensions.Logging; // Add this using statement
 
 namespace Application.Service;
 
@@ -13,33 +14,67 @@ public class RequestService
 {
     private readonly KomReqDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<RequestService> _logger; // Add this
 
-    public RequestService(KomReqDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public RequestService(
+        KomReqDbContext dbContext,
+        UserManager<ApplicationUser> userManager,
+        ILogger<RequestService> logger) // Add this
     {
         _dbContext = dbContext;
         _userManager = userManager;
+        _logger = logger; // Assign the logger
     }
 
     public async Task<(bool Success, int RequestId, string ErrorMessage, int ErrorCode)> CreateRequestAsync(
-        CreateRequestDto model, string managerId)
+        CreateRequestDto model, string currentUserId)
     {
-        if (!await _dbContext.Clients.AnyAsync(c => c.Id == model.ClientId))
-            return (false, 0, "Клиент не найден.", 404);
+        _logger.LogInformation("CreateRequestAsync called for UserId: {UserId}", currentUserId);
+
+        // if (!await _dbContext.Clients.AnyAsync(c => c.Id == model.ClientId))
+        //     return (false, 0, "Клиент не найден.", 404);
 
         if (!await _dbContext.EquipmentTypes.AnyAsync(e => e.Id == model.EquipmentTypeId && e.IsActive))
             return (false, 0, "Тип оборудования не найден или неактивен.", 404);
 
+        var managerUser = await _userManager.FindByIdAsync(currentUserId); // Возвращено на FindByIdAsync
+        if (managerUser == null)
+        {
+            _logger.LogWarning("Manager user not found for UserId: {UserId}", currentUserId); // Возвращено для лога
+            return (false, 0, "Текущий пользователь не найден.", 404);
+        }
+
+        var roles = await _userManager.GetRolesAsync(managerUser);
+        _logger.LogInformation("User {UserId} has roles: {Roles}", currentUserId, string.Join(", ", roles)); // Возвращено для лога
+
+        if (!roles.Contains("Manager"))
+        {
+            _logger.LogWarning("User {UserId} is not a Manager. Roles: {Roles}", currentUserId, string.Join(", ", roles)); // Возвращено для лога
+            return (false, 0, "Текущий пользователь не является действующим менеджером.", 403);
+        }
+
+        string creatorIdToUse = currentUserId;
+        if (!string.IsNullOrEmpty(model.ClientUserId))
+        {
+            var clientUser = await _userManager.FindByIdAsync(model.ClientUserId);
+            if (clientUser == null || !await _userManager.IsInRoleAsync(clientUser, "Client"))
+                return (false, 0, "Указанный пользователь-клиент не найден или не имеет роли 'Client'.", 404);
+            creatorIdToUse = model.ClientUserId;
+        }
+
         var request = new Request
         {
-            ClientId = model.ClientId,
+            CreatorId = creatorIdToUse, // Используем ClientUserId или текущего пользователя
             EquipmentTypeId = model.EquipmentTypeId,
             Quantity = model.Quantity,
-            Priority = model.Priority,
+            Priority = Enum.Parse<RequestPriority>(model.Priority, ignoreCase: true),
             CreatedDate = DateTime.UtcNow,
-            ManagerId = managerId,
+            ManagerId = currentUserId, // Менеджер, создавший заявку
             CurrentStatusId = 1, // Новая
             Comments = model.Comments,
-            TargetCompletion = model.TargetCompletion
+            TargetCompletion = model.TargetCompletion.HasValue
+                ? DateTime.SpecifyKind(model.TargetCompletion.Value, DateTimeKind.Utc)
+                : null,
         };
 
         _dbContext.Requests.Add(request);
@@ -49,7 +84,7 @@ public class RequestService
         {
             RequestId = request.Id,
             NewStatusId = 1,
-            ChangedByUserId = managerId,
+            ChangedByUserId = currentUserId, // Пользователь, изменивший заявку
             Comment = "Заявка создана",
             ChangeDate = DateTime.UtcNow
         };
@@ -57,7 +92,7 @@ public class RequestService
 
         var notification = new Notification
         {
-            ClientId = model.ClientId,
+            UserId = creatorIdToUse, // Уведомление теперь для создателя заявки (ClientUserId или текущий менеджер)
             RequestId = request.Id,
             Message = $"Создана новая заявка #{request.Id}",
             Type = NotificationType.StatusChange,
@@ -83,7 +118,9 @@ public class RequestService
         request.Quantity = model.Quantity;
         request.Priority = model.Priority;
         request.Comments = model.Comments;
-        request.TargetCompletion = model.TargetCompletion;
+        request.TargetCompletion = model.TargetCompletion.HasValue
+            ? DateTime.SpecifyKind(model.TargetCompletion.Value, DateTimeKind.Utc)
+            : null;
 
         var history = new RequestHistory
         {
@@ -139,7 +176,6 @@ public class RequestService
 
         var notification = new Notification
         {
-            ClientId = request.ClientId,
             RequestId = request.Id,
             Message = $"Статус заявки #{request.Id} изменён на '{newStatus.Name}'",
             Type = NotificationType.StatusChange,
@@ -236,7 +272,7 @@ public class RequestService
         string userId, bool isClient)
     {
         var request = await _dbContext.Requests
-            .Include(r => r.Client)
+            .Include(r => r.Creator) // Изменено с r.Client на r.Creator
             .Include(r => r.EquipmentType)
             .Include(r => r.CurrentStatus)
             .Include(r => r.Manager)
@@ -248,7 +284,7 @@ public class RequestService
 
         if (isClient)
         {
-            if (request.Client.UniqueCode.ToString() != userId)
+            if (request.CreatorId != userId) // Изменено с request.Client.UniqueCode на request.CreatorId
                 return (false, null, "Доступ запрещён.", 403);
 
             return (true, (object)new
@@ -277,8 +313,10 @@ public class RequestService
         return (true, (object)new
         {
             request.Id,
-            Client = new
-                { request.Client.Id, request.Client.FullName, request.Client.CompanyName, request.Client.Email },
+            Creator = new // Изменено с Client на Creator
+            {
+                request.Creator.Id, request.Creator.FullName, request.Creator.Email
+            }, // Изменено на данные ApplicationUser
             Equipment = new
                 { request.EquipmentType.Id, EquipmentName = request.EquipmentType.Name, request.EquipmentType.Price },
             request.Quantity,
@@ -297,13 +335,13 @@ public class RequestService
         bool isTechnician)
     {
         var query = _dbContext.Requests
-            .Include(r => r.Client)
+            .Include(r => r.Creator) // Изменено с r.Client на r.Creator
             .Include(r => r.EquipmentType)
             .Include(r => r.CurrentStatus)
             .AsQueryable();
 
         if (isClient)
-            query = query.Where(r => r.Client.UniqueCode.ToString() == userId);
+            query = query.Where(r => r.CreatorId == userId); // Изменено с r.Client.UniqueCode на r.CreatorId
         else if (isTechnician)
             query = query.Where(r =>
                 r.RequestAssignments.Any(ra =>
@@ -312,9 +350,9 @@ public class RequestService
         if (filter.StatusId.HasValue)
             query = query.Where(r => r.CurrentStatusId == filter.StatusId);
         if (filter.ClientId.HasValue)
-            query = query.Where(r => r.ClientId == filter.ClientId);
-        if (filter.Priority.HasValue)
-            query = query.Where(r => r.Priority == filter.Priority);
+            // query = query.Where(r => r.ClientId == filter.ClientId); // Закомментировано
+            if (filter.Priority.HasValue)
+                query = query.Where(r => r.Priority == filter.Priority);
         if (filter.StartDate.HasValue)
             query = query.Where(r => r.CreatedDate >= filter.StartDate);
         if (filter.EndDate.HasValue)
@@ -338,7 +376,7 @@ public class RequestService
                 : (object)new
                 {
                     r.Id,
-                    Client = new { r.Client.Id, r.Client.FullName, r.Client.CompanyName, r.Client.Email },
+                    Creator = new { r.Creator.Id, r.Creator.FullName, r.Creator.Email }, // Изменено с Client на Creator
                     Equipment = new { r.EquipmentType.Id, EquipmentName = r.EquipmentType.Name, r.EquipmentType.Price },
                     r.Quantity,
                     r.Priority,
@@ -358,7 +396,7 @@ public class RequestService
         if (request == null)
             return (false, null, "Заявка не найдена.", 404);
 
-        if (isClient && request.Client.UniqueCode.ToString() != userId)
+        if (isClient && request.CreatorId != userId) // Изменено с request.Client.UniqueCode на request.CreatorId
             return (false, null, "Доступ запрещён.", 403);
 
         var isTechnician = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(userId), "Technician");
@@ -407,6 +445,80 @@ public class RequestService
             return (false, "Заявка не найдена.", 404);
 
         request.IsActive = false; // Логическое удаление
+        await _dbContext.SaveChangesAsync();
+        return (true, null, 0);
+    }
+
+    public async Task<(bool Success, string ErrorMessage, int ErrorCode)> AddCommentToRequestAsync(
+        int id, AddCommentDto model, string userId)
+    {
+        var request = await _dbContext.Requests
+            .FirstOrDefaultAsync(r => r.Id == id && r.IsActive);
+        if (request == null)
+            return (false, "Заявка не найдена.", 404);
+
+        // Check if the user is associated with the request (Creator, Manager, Technician)
+        var isAssociated = request.CreatorId == userId ||
+                           request.ManagerId == userId ||
+                           await _dbContext.RequestAssignments.AnyAsync(ra =>
+                               ra.RequestId == id && ra.UserId == userId);
+
+        if (!isAssociated)
+            return (false, "У вас нет прав для добавления комментария к этой заявке.", 403);
+
+        var history = new RequestHistory
+        {
+            RequestId = id,
+            OldStatusId = request.CurrentStatusId,
+            NewStatusId = request.CurrentStatusId, // Status does not change with a comment
+            ChangedByUserId = userId,
+            Comment = model.Comment,
+            ChangeDate = DateTime.UtcNow,
+            FieldChanged = "Comment"
+        };
+        _dbContext.RequestHistories.Add(history);
+
+        var notification = new Notification
+        {
+            UserId = request.CreatorId, // Notify the creator
+            RequestId = id,
+            Message = $"К заявке #{id} добавлен новый комментарий.",
+            Type = NotificationType.StatusChange, // Can be a new type like CommentAdded
+            SentDate = DateTime.UtcNow
+        };
+        _dbContext.Notifications.Add(notification);
+
+        // Notify manager if different from creator
+        if (request.ManagerId != null && request.ManagerId != request.CreatorId)
+        {
+            _dbContext.Notifications.Add(new Notification
+            {
+                UserId = request.ManagerId,
+                RequestId = id,
+                Message = $"К заявке #{id} добавлен новый комментарий.",
+                Type = NotificationType.StatusChange,
+                SentDate = DateTime.UtcNow
+            });
+        }
+
+        // Notify assigned technicians
+        var assignedTechnicians = await _dbContext.RequestAssignments
+            .Where(ra => ra.RequestId == id && ra.RoleInRequest == RequestAssignmentRole.Technician)
+            .Select(ra => ra.UserId)
+            .ToListAsync();
+        foreach (var technicianId in assignedTechnicians.Where(tId =>
+                     tId != userId && tId != request.CreatorId && tId != request.ManagerId))
+        {
+            _dbContext.Notifications.Add(new Notification
+            {
+                UserId = technicianId,
+                RequestId = id,
+                Message = $"К заявке #{id} добавлен новый комментарий.",
+                Type = NotificationType.StatusChange,
+                SentDate = DateTime.UtcNow
+            });
+        }
+
         await _dbContext.SaveChangesAsync();
         return (true, null, 0);
     }

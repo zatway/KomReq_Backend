@@ -11,7 +11,7 @@ public class Request
     public int Id { get; set; }
 
     [Required]
-    public int ClientId { get; set; }
+    public string CreatorId { get; set; } = string.Empty; // Пользователь, создавший заявку
 
     [Required]
     public int EquipmentTypeId { get; set; }
@@ -39,8 +39,8 @@ public class Request
     public bool IsActive { get; set; } = true;
 
     // Навигационные свойства
-    [ForeignKey("ClientId")]
-    public Client Client { get; set; }
+    [ForeignKey("CreatorId")]
+    public ApplicationUser Creator { get; set; } = null!; // Пользователь, создавший заявку
 
     [ForeignKey("EquipmentTypeId")]
     public EquipmentType EquipmentType { get; set; }

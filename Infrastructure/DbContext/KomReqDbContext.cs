@@ -13,7 +13,7 @@ namespace Infrastructure.DbContext
         {
         }
 
-        public DbSet<Client> Clients { get; set; }
+        // public DbSet<Client> Clients { get; set; }
         public DbSet<EquipmentType> EquipmentTypes { get; set; }
         public DbSet<RequestStatus> RequestStatuses { get; set; }
         public DbSet<Request> Requests { get; set; }
@@ -39,17 +39,17 @@ namespace Infrastructure.DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Client
-            modelBuilder.Entity<Client>()
-                .HasIndex(c => c.Email)
-                .IsUnique();
-            modelBuilder.Entity<Client>()
-                .HasIndex(c => c.Tin)
-                .IsUnique();
-            modelBuilder.Entity<Client>()
-                .HasIndex(c => c.UniqueCode)
-                .IsUnique();
-            modelBuilder.Entity<Client>()
-                .HasIndex(c => c.CompanyName);
+            // modelBuilder.Entity<Client>()
+            //     .HasIndex(c => c.Email)
+            //     .IsUnique();
+            // modelBuilder.Entity<Client>()
+            //     .HasIndex(c => c.Tin)
+            //     .IsUnique();
+            // modelBuilder.Entity<Client>()
+            //     .HasIndex(c => c.UniqueCode)
+            //     .IsUnique();
+            // modelBuilder.Entity<Client>()
+            //     .HasIndex(c => c.CompanyName);
 
             // EquipmentType
             modelBuilder.Entity<EquipmentType>()
@@ -77,19 +77,19 @@ namespace Infrastructure.DbContext
             );
 
             // Response
-            modelBuilder.Entity<Request>()
-                .HasIndex(r => r.ClientId);
+            // modelBuilder.Entity<Request>()
+            //     .HasIndex(r => r.ClientId);
             modelBuilder.Entity<Request>()
                 .HasIndex(r => r.EquipmentTypeId);
             modelBuilder.Entity<Request>()
                 .HasIndex(r => r.CurrentStatusId);
             modelBuilder.Entity<Request>()
                 .HasIndex(r => r.CreatedDate);
-            modelBuilder.Entity<Request>()
-                .HasOne(r => r.Client)
-                .WithMany(c => c.Requests)
-                .HasForeignKey(r => r.ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.Entity<Request>()
+            //     .HasOne(r => r.Client)
+            //     .WithMany(c => c.Requests)
+            //     .HasForeignKey(r => r.ClientId)
+            //     .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.EquipmentType)
                 .WithMany(e => e.Requests)
@@ -168,8 +168,8 @@ namespace Infrastructure.DbContext
             // Notification
             modelBuilder.Entity<Notification>()
                 .HasIndex(n => n.UserId);
-            modelBuilder.Entity<Notification>()
-                .HasIndex(n => n.ClientId);
+            // modelBuilder.Entity<Notification>()
+            //     .HasIndex(n => n.ClientId);
             modelBuilder.Entity<Notification>()
                 .HasIndex(n => n.SentDate);
             modelBuilder.Entity<Notification>()
@@ -182,11 +182,11 @@ namespace Infrastructure.DbContext
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Notification>()
-                .HasOne(n => n.Client)
-                .WithMany(c => c.Notifications)
-                .HasForeignKey(n => n.ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.Entity<Notification>()
+            //     .HasOne(n => n.Client)
+            //     .WithMany(c => c.Notifications)
+            //     .HasForeignKey(n => n.ClientId)
+            //     .OnDelete(DeleteBehavior.Restrict);
 
             // AuditLog
             modelBuilder.Entity<AuditLog>()

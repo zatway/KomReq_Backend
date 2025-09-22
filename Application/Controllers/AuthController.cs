@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Controllers;
 
@@ -90,14 +91,22 @@ public class AuthController : ControllerBase
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+
+            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+
+            new Claim(ClaimTypes.Email, user.Email ?? string.Empty)
         };
+
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
@@ -105,6 +114,7 @@ public class AuthController : ControllerBase
             expires: DateTime.UtcNow.AddHours(12),
             signingCredentials: creds
         );
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
@@ -222,6 +232,38 @@ public class AuthController : ControllerBase
 
         await _userManager.AddToRolesAsync(user, rolesToAdd);
         return Ok(new { Message = $"Роли пользователя изменены." });
+    }
+
+    // ---------------------- Получение пользователей по роли для выбора в заявке (Админ/Менеджер) ----------------------
+    [Authorize(Roles = "Admin,Manager")]
+    [HttpGet("search-users")]
+    public async Task<IActionResult> SearchUsers([FromQuery] string? query, [FromQuery] string? role)
+    {
+        var usersQuery = _userManager.Users.AsQueryable();
+
+        if (!string.IsNullOrEmpty(role))
+        {
+            var usersInRoleIds = await _userManager.GetUsersInRoleAsync(role);
+            usersQuery = usersQuery.Where(u => usersInRoleIds.Contains(u));
+        }
+
+        if (!string.IsNullOrEmpty(query))
+        {
+            usersQuery = usersQuery.Where(u =>
+                u.UserName!.Contains(query) ||
+                u.Email!.Contains(query) ||
+                u.FullName!.Contains(query));
+        }
+
+        var result = await usersQuery.Select(u => new
+        {
+            u.Id,
+            u.UserName,
+            u.FullName,
+            u.Email
+        }).ToListAsync();
+
+        return Ok(result);
     }
 }
 

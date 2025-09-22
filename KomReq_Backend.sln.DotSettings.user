@@ -10,4 +10,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\zatway\.nuget\packages\microsoft.extensions.identity.core\9.0.8\lib\net9.0\Microsoft.Extensions.Identity.Core.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.8\ref\net9.0\System.ComponentModel.Annotations.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\zatway\.nuget\packages\questpdf\2202.8.2\lib\net6.0\QuestPDF.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
