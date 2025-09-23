@@ -18,6 +18,9 @@ public class ReportService
     public ReportService(KomReqDbContext dbContext)
     {
         _dbContext = dbContext;
+        // Ensure QuestPDF works with Cyrillic and without commercial license
+        QuestPDF.Settings.License = LicenseType.Community;
+        QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
     }
 
     public async Task<byte[]> GenerateRequestReportPdf(ReportFilterDto filter)

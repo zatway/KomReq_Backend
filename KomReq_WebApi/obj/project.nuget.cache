@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vsbfBspSbuw=",
+  "dgSpecHash": "IPL5SzrqZb4=",
   "success": true,
-  "projectFilePath": "C:\\work\\KomReq\\KomReq_Backend\\KomReq_WebApi\\KomReq_WebApi.csproj",
+  "projectFilePath": "E:\\work_project\\komReq\\KomReq_Backend\\KomReq_WebApi\\KomReq_WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zatway\\.nuget\\packages\\closedxml\\0.105.0\\closedxml.0.105.0.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\closedxml.parser\\2.0.0\\closedxml.parser.2.0.0.nupkg.sha512",

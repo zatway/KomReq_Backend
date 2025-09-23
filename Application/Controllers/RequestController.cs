@@ -80,8 +80,8 @@ public class RequestController : ControllerBase
         return Ok(new { Message = "Статус заявки изменён." });
     }
 
-    // Назначение сотрудника (менеджеры)
-    [Authorize(Roles = "Manager")]
+    // Назначение сотрудника (администраторы и менеджеры)
+    [Authorize(Roles = "Admin,Manager")]
     [HttpPost("{id}/assign")]
     public async Task<IActionResult> AssignUser(int id, [FromBody] AssignUserDto model)
     {
@@ -95,8 +95,8 @@ public class RequestController : ControllerBase
         return Ok(new { Message = "Сотрудник назначен." });
     }
 
-    // Прикрепление файла (менеджеры и техники)
-    [Authorize(Roles = "Manager,Technician")]
+    // Прикрепление файла (администраторы, менеджеры и техники)
+    [Authorize(Roles = "Admin,Manager,Technician")]
     [HttpPost("{id}/files")]
     public async Task<IActionResult> UploadFile(int id, [FromForm] UploadFileDto model)
     {
@@ -116,10 +116,20 @@ public class RequestController : ControllerBase
     public async Task<IActionResult> GetRequest(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var isClient = User.IsInRole("Client");
+        var isAdmin = User.IsInRole("Admin");
+        var isManager = User.IsInRole("Manager");
+        // Only treat as client if not Admin/Manager
+        var isClient = User.IsInRole("Client") && !isAdmin && !isManager;
         var result = await _requestService.GetRequestAsync(id, userId, isClient);
         if (!result.Success)
-            return result.ErrorCode == 404 ? NotFound(new { Message = result.ErrorMessage }) : Forbid(result.ErrorMessage);
+        {
+            return result.ErrorCode switch
+            {
+                404 => NotFound(new { Message = result.ErrorMessage }),
+                403 => Forbid(),
+                _ => BadRequest(new { Message = result.ErrorMessage })
+            };
+        }
 
         return Ok(result.Request);
     }
@@ -130,8 +140,11 @@ public class RequestController : ControllerBase
     public async Task<IActionResult> GetRequests([FromQuery] RequestFilterDto filter)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var isClient = User.IsInRole("Client");
-        var isTechnician = User.IsInRole("Technician");
+        var isAdmin = User.IsInRole("Admin");
+        var isManager = User.IsInRole("Manager");
+        // Only restrict as technician/client if not Admin/Manager
+        var isTechnician = User.IsInRole("Technician") && !isAdmin && !isManager;
+        var isClient = User.IsInRole("Client") && !isAdmin && !isManager;
         var requests = await _requestService.GetRequestsAsync(filter, userId, isClient, isTechnician);
         return Ok(requests);
     }
@@ -142,10 +155,19 @@ public class RequestController : ControllerBase
     public async Task<IActionResult> GetRequestHistory(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var isClient = User.IsInRole("Client");
+        var isAdmin = User.IsInRole("Admin");
+        var isManager = User.IsInRole("Manager");
+        var isClient = User.IsInRole("Client") && !isAdmin && !isManager;
         var result = await _requestService.GetRequestHistoryAsync(id, userId, isClient);
         if (!result.Success)
-            return result.ErrorCode == 404 ? NotFound(new { Message = result.ErrorMessage }) : Forbid(result.ErrorMessage);
+        {
+            return result.ErrorCode switch
+            {
+                404 => NotFound(new { Message = result.ErrorMessage }),
+                403 => Forbid(),
+                _ => BadRequest(new { Message = result.ErrorMessage })
+            };
+        }
 
         return Ok(result.History);
     }
@@ -171,7 +193,14 @@ public class RequestController : ControllerBase
 
         var result = await _requestService.AddCommentToRequestAsync(id, model, User.FindFirstValue(ClaimTypes.NameIdentifier));
         if (!result.Success)
-            return result.ErrorCode == 404 ? NotFound(new { Message = result.ErrorMessage }) : Forbid(result.ErrorMessage);
+        {
+            return result.ErrorCode switch
+            {
+                404 => NotFound(new { Message = result.ErrorMessage }),
+                403 => Forbid(),
+                _ => BadRequest(new { Message = result.ErrorMessage })
+            };
+        }
 
         return Ok(new { Message = "Комментарий добавлен." });
     }

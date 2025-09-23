@@ -195,7 +195,10 @@ public class RequestService
         if (request == null)
             return (false, "Заявка не найдена.", 404);
 
-        if (request.ManagerId != managerId)
+        // Allow Admins to assign regardless of manager ownership
+        var caller = await _userManager.FindByIdAsync(managerId);
+        var callerIsAdmin = await _userManager.IsInRoleAsync(caller, "Admin");
+        if (!callerIsAdmin && request.ManagerId != managerId)
             return (false, "Только назначенный менеджер может назначать сотрудников.", 403);
 
         var user = await _userManager.FindByIdAsync(model.UserId);
@@ -236,8 +239,11 @@ public class RequestService
         if (request == null)
             return (false, 0, "Заявка не найдена.", 404);
 
-        var isTechnician = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(userId), "Technician");
-        if (isTechnician)
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        var isTechnician = await _userManager.IsInRoleAsync(currentUser, "Technician");
+        var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+        var isManager = await _userManager.IsInRoleAsync(currentUser, "Manager");
+        if (isTechnician && !isAdmin && !isManager)
         {
             var isAssigned = await _dbContext.RequestAssignments
                 .AnyAsync(ra =>
@@ -246,8 +252,11 @@ public class RequestService
                 return (false, 0, "Техник не назначен на эту заявку.", 403);
         }
 
-        var filePath = Path.Combine("Uploads", $"{Guid.NewGuid()}_{model.File.FileName}");
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        var uploadsRoot = Path.Combine(AppContext.BaseDirectory, "Uploads");
+        Directory.CreateDirectory(uploadsRoot);
+        var storedFileName = $"{Guid.NewGuid()}_{model.File.FileName}";
+        var absolutePath = Path.Combine(uploadsRoot, storedFileName);
+        using (var stream = new FileStream(absolutePath, FileMode.Create))
         {
             await model.File.CopyToAsync(stream);
         }
@@ -255,7 +264,8 @@ public class RequestService
         var requestFile = new RequestFile
         {
             RequestId = id,
-            FilePath = filePath,
+            // store relative path for portability, write used absolute path above
+            FilePath = Path.Combine("Uploads", storedFileName),
             FileName = model.File.FileName,
             FileType = model.File.ContentType,
             Description = model.Description,
@@ -300,8 +310,11 @@ public class RequestService
             }, null, 0);
         }
 
-        var isTechnician = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(userId), "Technician");
-        if (isTechnician)
+        var user = await _userManager.FindByIdAsync(userId);
+        var isTechnician = await _userManager.IsInRoleAsync(user, "Technician");
+        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        var isManager = await _userManager.IsInRoleAsync(user, "Manager");
+        if (isTechnician && !isAdmin && !isManager)
         {
             var isAssigned = await _dbContext.RequestAssignments
                 .AnyAsync(ra =>
@@ -399,8 +412,11 @@ public class RequestService
         if (isClient && request.CreatorId != userId) // Изменено с request.Client.UniqueCode на request.CreatorId
             return (false, null, "Доступ запрещён.", 403);
 
-        var isTechnician = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(userId), "Technician");
-        if (isTechnician)
+        var user = await _userManager.FindByIdAsync(userId);
+        var isTechnician = await _userManager.IsInRoleAsync(user, "Technician");
+        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        var isManager = await _userManager.IsInRoleAsync(user, "Manager");
+        if (isTechnician && !isAdmin && !isManager)
         {
             var isAssigned = await _dbContext.RequestAssignments
                 .AnyAsync(ra =>

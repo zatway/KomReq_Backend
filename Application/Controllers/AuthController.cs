@@ -165,8 +165,13 @@ public class AuthController : ControllerBase
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound(new { Message = "Пользователь не найден." });
 
-        await _userManager.DeleteAsync(user);
-        return Ok(new { Message = "Пользователь удалён." });
+        // Soft-delete: deactivate instead of physical delete to satisfy FK constraints
+        user.IsActive = false;
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok(new { Message = "Пользователь деактивирован." });
     }
 
     // ---------------------- Смена пароля ----------------------

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj": {}
+    "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj": {}
   },
   "projects": {
-    "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj": {
+    "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj",
+        "projectUniqueName": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj",
         "projectName": "Platform",
-        "projectPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\Platform.csproj",
+        "projectPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\Platform.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\KomReq\\KomReq_Backend\\Platform\\obj\\",
+        "outputPath": "E:\\work_project\\komReq\\KomReq_Backend\\Platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -20,6 +20,7 @@
           "net9.0"
         ],
         "sources": {
+          "http://intranet.kd.local:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -73,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
