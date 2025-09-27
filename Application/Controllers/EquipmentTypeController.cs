@@ -46,6 +46,7 @@ public class EquipmentTypeController : ControllerBase
         {
             return NotFound("Тип оборудования не найден.");
         }
+
         return Ok(equipmentType);
     }
 
@@ -58,11 +59,13 @@ public class EquipmentTypeController : ControllerBase
             return BadRequest("Тип оборудования с таким именем уже существует.");
         }
 
+        string? normalizedSpecs = NormalizeJson(dto.Specifications);
+
         var equipmentType = new EquipmentType
         {
             Name = dto.Name,
             Description = dto.Description,
-            Specifications = dto.Specifications,
+            Specifications = normalizedSpecs,
             Price = dto.Price,
             IsActive = dto.IsActive,
             CreatedAt = DateTime.UtcNow
@@ -83,14 +86,17 @@ public class EquipmentTypeController : ControllerBase
             return NotFound("Тип оборудования не найден.");
         }
 
-        if (!string.IsNullOrEmpty(dto.Name) && await _dbContext.EquipmentTypes.AnyAsync(et => et.Name == dto.Name && et.Id != id))
+        if (!string.IsNullOrEmpty(dto.Name) &&
+            await _dbContext.EquipmentTypes.AnyAsync(et => et.Name == dto.Name && et.Id != id))
         {
             return BadRequest("Тип оборудования с таким именем уже существует.");
         }
 
         equipmentType.Name = dto.Name ?? equipmentType.Name;
         equipmentType.Description = dto.Description ?? equipmentType.Description;
-        equipmentType.Specifications = dto.Specifications ?? equipmentType.Specifications;
+        equipmentType.Specifications = dto.Specifications != null
+            ? NormalizeJson(dto.Specifications)
+            : equipmentType.Specifications;
         equipmentType.Price = dto.Price ?? equipmentType.Price;
         equipmentType.IsActive = dto.IsActive ?? equipmentType.IsActive;
 
@@ -111,8 +117,22 @@ public class EquipmentTypeController : ControllerBase
 
         // Soft delete
         equipmentType.IsActive = false;
-        // _dbContext.EquipmentTypes.Remove(equipmentType);
         await _dbContext.SaveChangesAsync();
         return NoContent();
+    }
+
+    static string? NormalizeJson(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return null;
+        var trimmed = input.Trim();
+        try
+        {
+            using var _ = System.Text.Json.JsonDocument.Parse(trimmed);
+            return trimmed;
+        }
+        catch
+        {
+            return System.Text.Json.JsonSerializer.Serialize(trimmed);
+        }
     }
 }

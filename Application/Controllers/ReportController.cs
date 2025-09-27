@@ -20,8 +20,15 @@ public class ReportController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetRequestsReportPdf([FromQuery] ReportFilterDto filter)
     {
-        var pdfBytes = await _reportService.GenerateRequestReportPdf(filter);
-        return File(pdfBytes, "application/pdf", "requests-report.pdf");
+        try
+        {
+            var pdfBytes = await _reportService.GenerateRequestReportPdf(filter);
+            return File(pdfBytes, "application/pdf", "requests-report.pdf");
+        }
+        catch (Exception ex)
+        {
+            return Problem(title: "Ошибка генерации PDF", detail: ex.Message, statusCode: 500);
+        }
     }
 
     [HttpGet("requests-excel")]

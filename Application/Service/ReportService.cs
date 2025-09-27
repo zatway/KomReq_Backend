@@ -18,9 +18,6 @@ public class ReportService
     public ReportService(KomReqDbContext dbContext)
     {
         _dbContext = dbContext;
-        // Ensure QuestPDF works with Cyrillic and without commercial license
-        QuestPDF.Settings.License = LicenseType.Community;
-        QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
     }
 
     public async Task<byte[]> GenerateRequestReportPdf(ReportFilterDto filter)
@@ -34,7 +31,7 @@ public class ReportService
             {
                 page.Size(QuestPDF.Helpers.PageSizes.A4);
                 page.PageColor(QuestPDF.Helpers.Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(12));
+                page.DefaultTextStyle(x => x.FontSize(12).FontFamily("Times New Roman"));
 
                 page.Header()
                     .AlignCenter() // Apply AlignCenter to the header container
@@ -54,8 +51,8 @@ public class ReportService
                             column.Item().Text($"Количество: {req.Quantity}");
                             column.Item().Text($"Приоритет: {req.Priority}");
                             column.Item().Text($"Статус: {req.CurrentStatus.Name}");
-                            column.Item().Height(10).Text(""); // Apply Height to the Item container
                         }
+
                     });
 
                 page.Footer()
@@ -113,6 +110,18 @@ public class ReportService
 
     private async Task<List<Request>> GetFilteredRequests(ReportFilterDto filter)
     {
+        // Normalize incoming dates to UTC to satisfy Npgsql timestamptz requirements
+        DateTime? startUtc = filter.StartDate.HasValue
+            ? (filter.StartDate.Value.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(filter.StartDate.Value, DateTimeKind.Utc)
+                : filter.StartDate.Value.ToUniversalTime())
+            : null;
+        DateTime? endUtc = filter.EndDate.HasValue
+            ? (filter.EndDate.Value.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(filter.EndDate.Value, DateTimeKind.Utc)
+                : filter.EndDate.Value.ToUniversalTime())
+            : null;
+
         var query = _dbContext.Requests
             .Include(r => r.Creator)
             .Include(r => r.EquipmentType)
@@ -131,14 +140,14 @@ public class ReportService
             query = query.Where(r => r.Priority == filter.Priority.Value);
         }
 
-        if (filter.StartDate.HasValue)
+        if (startUtc.HasValue)
         {
-            query = query.Where(r => r.CreatedDate >= filter.StartDate.Value);
+            query = query.Where(r => r.CreatedDate >= startUtc.Value);
         }
 
-        if (filter.EndDate.HasValue)
+        if (endUtc.HasValue)
         {
-            query = query.Where(r => r.CreatedDate <= filter.EndDate.Value);
+            query = query.Where(r => r.CreatedDate <= endUtc.Value);
         }
 
         if (!string.IsNullOrEmpty(filter.ClientUserId))

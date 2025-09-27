@@ -7,6 +7,7 @@ using Platform.Models.Request.Request;
 using Platform.Models.Response.Request;
 using Platform.Models.Users;
 using Microsoft.Extensions.Logging; // Add this using statement
+using System.Text.Json;
 
 namespace Application.Service;
 
@@ -101,6 +102,17 @@ public class RequestService
         _dbContext.Notifications.Add(notification);
 
         await _dbContext.SaveChangesAsync();
+        // Audit: request created
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = currentUserId,
+            Action = "CREATE_Requests",
+            EntityId = request.Id,
+            EntityType = nameof(Request),
+            Details = JsonSerializer.Serialize(new { managerId = currentUserId, creatorId = creatorIdToUse, priority = request.Priority.ToString() }),
+            Timestamp = DateTime.UtcNow
+        });
+        await _dbContext.SaveChangesAsync();
         return (true, request.Id, null, 0);
     }
 
@@ -134,6 +146,17 @@ public class RequestService
         _dbContext.RequestHistories.Add(history);
 
         await _dbContext.SaveChangesAsync();
+        // Audit: request updated
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = userId,
+            Action = "UPDATE_Requests",
+            EntityId = request.Id,
+            EntityType = nameof(Request),
+            Details = JsonSerializer.Serialize(new { quantity = request.Quantity, priority = request.Priority.ToString(), comments = request.Comments, targetCompletion = request.TargetCompletion }),
+            Timestamp = DateTime.UtcNow
+        });
+        await _dbContext.SaveChangesAsync();
         return (true, null, 0);
     }
 
@@ -162,11 +185,12 @@ public class RequestService
                 return (false, "Техник может устанавливать только статусы 'В работе' или 'Наладка'.", 403);
         }
 
+        var previousStatusId = request.CurrentStatusId;
         request.CurrentStatusId = model.NewStatusId;
         var history = new RequestHistory
         {
             RequestId = request.Id,
-            OldStatusId = request.CurrentStatusId,
+            OldStatusId = previousStatusId,
             NewStatusId = model.NewStatusId,
             ChangedByUserId = userId,
             Comment = model.Comment,
@@ -176,12 +200,45 @@ public class RequestService
 
         var notification = new Notification
         {
+            UserId = request.CreatorId,
             RequestId = request.Id,
             Message = $"Статус заявки #{request.Id} изменён на '{newStatus.Name}'",
             Type = NotificationType.StatusChange,
             SentDate = DateTime.UtcNow
         };
         _dbContext.Notifications.Add(notification);
+
+        // Write audit log
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = userId,
+            Action = "UPDATE_Requests_Status",
+            EntityId = request.Id,
+            EntityType = nameof(Request),
+            Details = JsonSerializer.Serialize(new { oldStatusId = previousStatusId, newStatusId = model.NewStatusId, comment = model.Comment }),
+            IpAddress = null,
+            Timestamp = DateTime.UtcNow
+        });
+
+        // Update status statistics (upsert for today)
+        var today = DateTime.UtcNow.Date;
+        var stat = await _dbContext.StatusStatistics.FirstOrDefaultAsync(s => s.StatusId == model.NewStatusId && s.Date == today);
+        var totalForStatus = await _dbContext.Requests.CountAsync(r => r.CurrentStatusId == model.NewStatusId);
+        if (stat == null)
+        {
+            stat = new StatusStatistic
+            {
+                StatusId = model.NewStatusId,
+                Date = today,
+                CountRequests = totalForStatus,
+                AvgCompletionDays = null
+            };
+            _dbContext.StatusStatistics.Add(stat);
+        }
+        else
+        {
+            stat.CountRequests = totalForStatus;
+        }
 
         await _dbContext.SaveChangesAsync();
         return (true, null, 0);
@@ -228,6 +285,17 @@ public class RequestService
         _dbContext.Notifications.Add(notification);
 
         await _dbContext.SaveChangesAsync();
+        // Audit: assignment
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = managerId,
+            Action = "CREATE_RequestAssignments",
+            EntityId = assignment.Id,
+            EntityType = nameof(RequestAssignment),
+            Details = JsonSerializer.Serialize(new { assignedUserId = model.UserId, role = model.Role.ToString(), requestId = id }),
+            Timestamp = DateTime.UtcNow
+        });
+        await _dbContext.SaveChangesAsync();
         return (true, null, 0);
     }
 
@@ -273,6 +341,17 @@ public class RequestService
             IsConfidential = model.IsConfidential
         };
         _dbContext.RequestFiles.Add(requestFile);
+        await _dbContext.SaveChangesAsync();
+        // Audit: file upload
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = userId,
+            Action = "CREATE_RequestFiles",
+            EntityId = requestFile.Id,
+            EntityType = nameof(RequestFile),
+            Details = JsonSerializer.Serialize(new { requestId = id, fileName = requestFile.FileName, contentType = requestFile.FileType }),
+            Timestamp = DateTime.UtcNow
+        });
         await _dbContext.SaveChangesAsync();
 
         return (true, requestFile.Id, null, 0);
@@ -461,6 +540,17 @@ public class RequestService
             return (false, "Заявка не найдена.", 404);
 
         request.IsActive = false; // Логическое удаление
+        await _dbContext.SaveChangesAsync();
+        // Audit: comment added
+        _dbContext.AuditLogs.Add(new AuditLog
+        {
+            UserId = request.ManagerId,
+            Action = "CREATE_RequestComments",
+            EntityId = id,
+            EntityType = nameof(Request),
+            Details = request.Comments,
+            Timestamp = DateTime.UtcNow
+        });
         await _dbContext.SaveChangesAsync();
         return (true, null, 0);
     }
