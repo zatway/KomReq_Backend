@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KomReq_WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d67bb998695ce44275f46eeed1d5b0ac469ce3f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d03ceb453f33231ab75ab872783462c5404fd0f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("KomReq_WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KomReq_WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

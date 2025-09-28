@@ -118,7 +118,6 @@ public class AuthController : ControllerBase
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    // ---------------------- Админ: список всех пользователей ----------------------
     [Authorize(Roles = "Admin")]
     [HttpGet("users")]
     public async Task<IActionResult> GetUsers()
@@ -143,7 +142,6 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
-    // ---------------------- Создание пользователя (только админ) ----------------------
     [Authorize(Roles = "Admin")]
     [HttpPost("create-user")]
     public async Task<IActionResult> CreateUser([FromBody] RegisterModel model)
@@ -151,7 +149,6 @@ public class AuthController : ControllerBase
         return await Register(model);
     }
 
-    // ---------------------- Удаление пользователя ----------------------
     [Authorize]
     [HttpDelete("delete-user/{id}")]
     public async Task<IActionResult> DeleteUser(string id)
@@ -165,7 +162,6 @@ public class AuthController : ControllerBase
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound(new { Message = "Пользователь не найден." });
 
-        // Soft-delete: deactivate instead of physical delete to satisfy FK constraints
         user.IsActive = false;
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
@@ -174,7 +170,6 @@ public class AuthController : ControllerBase
         return Ok(new { Message = "Пользователь деактивирован." });
     }
 
-    // ---------------------- Смена пароля ----------------------
     [Authorize]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
@@ -206,7 +201,6 @@ public class AuthController : ControllerBase
         return Ok(new { Message = "Пароль успешно изменён." });
     }
 
-    // ---------------------- Изменение роли (только админ) ----------------------
     [Authorize(Roles = "Admin")]
     [HttpPost("change-role")]
     public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleModel model)
@@ -239,7 +233,6 @@ public class AuthController : ControllerBase
         return Ok(new { Message = $"Роли пользователя изменены." });
     }
 
-    // ---------------------- Получение пользователей по роли для выбора в заявке (Админ/Менеджер) ----------------------
     [Authorize(Roles = "Admin,Manager")]
     [HttpGet("search-users")]
     public async Task<IActionResult> SearchUsers([FromQuery] string? query, [FromQuery] string? role)
