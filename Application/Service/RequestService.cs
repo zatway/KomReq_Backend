@@ -304,6 +304,7 @@ public class RequestService
     {
         var request = await _dbContext.Requests
             .FirstOrDefaultAsync(r => r.Id == id && r.IsActive);
+        
         if (request == null)
             return (false, 0, "Заявка не найдена.", 404);
 
